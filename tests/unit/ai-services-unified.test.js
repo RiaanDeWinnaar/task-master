@@ -150,6 +150,14 @@ const mockOpenAIProvider = {
 	isRequiredApiKey: jest.fn(() => true)
 };
 
+const mockQwenProvider = {
+	generateText: jest.fn(),
+	streamText: jest.fn(),
+	generateObject: jest.fn(),
+	getRequiredApiKeyName: jest.fn(() => 'QWEN_API_KEY'),
+	isRequiredApiKey: jest.fn(() => true)
+};
+
 const mockOllamaProvider = {
 	generateText: jest.fn(),
 	streamText: jest.fn(),
@@ -170,6 +178,7 @@ jest.unstable_mockModule('../../src/ai-providers/index.js', () => ({
 		isRequiredApiKey: jest.fn(() => true)
 	})),
 	OpenAIProvider: jest.fn(() => mockOpenAIProvider),
+	QwenAIProvider: jest.fn(() => mockQwenProvider),
 	XAIProvider: jest.fn(() => ({
 		generateText: jest.fn(),
 		streamText: jest.fn(),

@@ -539,6 +539,24 @@ async function setModel(role, modelId, options = {}) {
 						warningMessage = `Warning: Gemini CLI model '${modelId}' not found in supported models. Setting without validation.`;
 						report('warn', warningMessage);
 					}
+				} else if (providerHint === 'qwen') {
+					// Qwen provider - check if model exists in our list
+					determinedProvider = 'qwen';
+					// Re-find modelData specifically for qwen provider
+					const qwenModels = availableModels.filter(
+						(m) => m.provider === 'qwen'
+					);
+					const qwenModelData = qwenModels.find(
+						(m) => m.id === modelId
+					);
+					if (qwenModelData) {
+						// Update modelData to the found qwen model
+						modelData = qwenModelData;
+						report('info', `Setting Qwen model '${modelId}'.`);
+					} else {
+						warningMessage = `Warning: Qwen model '${modelId}' not found in supported models. Setting without validation.`;
+						report('warn', warningMessage);
+					}
 				} else {
 					// Invalid provider hint - should not happen with our constants
 					throw new Error(`Invalid provider hint received: ${providerHint}`);

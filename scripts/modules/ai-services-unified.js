@@ -48,6 +48,7 @@ import {
 	OpenAIProvider,
 	OpenRouterAIProvider,
 	PerplexityAIProvider,
+	QwenAIProvider,
 	VertexAIProvider,
 	XAIProvider
 } from '../../src/ai-providers/index.js';
@@ -61,6 +62,7 @@ const PROVIDERS = {
 	perplexity: new PerplexityAIProvider(),
 	google: new GoogleAIProvider(),
 	openai: new OpenAIProvider(),
+	qwen: new QwenAIProvider(),
 	xai: new XAIProvider(),
 	groq: new GroqProvider(),
 	openrouter: new OpenRouterAIProvider(),
