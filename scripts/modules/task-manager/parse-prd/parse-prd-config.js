@@ -6,8 +6,7 @@ import { z } from 'zod';
 import { TASK_PRIORITY_OPTIONS } from '../../../../src/constants/task-priority.js';
 import { getCurrentTag, isSilentMode, log } from '../../utils.js';
 import { Duration } from '../../../../src/utils/timeout-manager.js';
-import { CUSTOM_PROVIDERS } from '../../../../src/constants/providers.js';
-import { getMainProvider, getResearchProvider } from '../../config-manager.js';
+import { hasCodebaseAnalysis } from '../../config-manager.js';
 
 // ============================================================================
 // SCHEMAS
@@ -63,18 +62,22 @@ export class PrdParseConfig {
 		this.targetTag = this.tag || getCurrentTag(this.projectRoot) || 'master';
 		this.isMCP = !!this.mcpLog;
 		this.outputFormat = this.isMCP && !this.reportProgress ? 'json' : 'text';
+
+		// Feature flag: Temporarily disable streaming, use generateObject instead
+		// TODO: Re-enable streaming once issues are resolved
+		const ENABLE_STREAMING = false;
+
 		this.useStreaming =
-			typeof this.reportProgress === 'function' || this.outputFormat === 'text';
+			ENABLE_STREAMING &&
+			(typeof this.reportProgress === 'function' ||
+				this.outputFormat === 'text');
 	}
 
 	/**
-	 * Check if Claude Code is being used
+	 * Check if codebase analysis is available (Claude Code or Gemini CLI)
 	 */
-	isClaudeCode() {
-		const currentProvider = this.research
-			? getResearchProvider(this.projectRoot)
-			: getMainProvider(this.projectRoot);
-		return currentProvider === CUSTOM_PROVIDERS.CLAUDE_CODE;
+	hasCodebaseAnalysis() {
+		return hasCodebaseAnalysis(this.research, this.projectRoot, this.session);
 	}
 }
 
